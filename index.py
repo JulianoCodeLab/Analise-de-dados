@@ -26,13 +26,44 @@ import pandas as pd
 df_states = pd.read_csv("df_states.csv")
 df_brasil = pd.read_csv("df_brasil.csv")
 
+df_states_ = df_states[df_states["data"] == "2020-05-13"]
+
 
 #le o geojason
 brazil_states = json.load(open("geojson/brazil_geo.json", "r"))
 
-#Para ver qual o tipo do dado
-type(brazil_states)
 
-brazil_states.keys()
+#==================================================================================================
+#----------------------------Iniciando a criação da dash
 
-brazil_states["features"]
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+
+#Contem o mapa mais moderno, e melhor para estilizar
+fig = px.choropleth_mapbox(df_states_, locations= "estado", color= "casosNovos",
+                            center={"lat": -16.95, "lon": -47.78}, zoom= 4,
+                            geojson= brazil_states, color_continuous_scale= "Redor",
+                            opacity= 0.4, hover_data={"casosAcumulado": True, "casosNovos": True, 
+                            "obitosNovos": True, "estado": True})
+
+fig.update_layout(
+    paper_bgcolor = "#242424",
+    autosize = True,
+    margin = go.Margin(l=0, r=0, t=0, b=0),
+    showlegend = False,
+    mapbox_style = "carto-darkmatter"
+)
+
+#==================================================================================================
+#----------------------------Layout
+
+app.layout = dbc.Container(
+    dbc.Row([
+        dbc.Col([
+            dcc.Graph(id= "choropleth-map", figure= fig)
+        ])
+    ])
+)
+
+
+if __name__ == "__main__":
+    app.run_server(debug = True)
