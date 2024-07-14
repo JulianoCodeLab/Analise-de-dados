@@ -178,7 +178,5 @@ def display_status(date, location):
         casos_novos,
         obitos_acumulado,
         obitos_novos,)
-
-
 if __name__ == "__main__":
     app.run_server(debug=True)
