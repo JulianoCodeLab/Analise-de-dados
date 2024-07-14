@@ -65,8 +65,8 @@ app.layout = dbc.Container(
     dbc.Row([
         dbc.Col([
             html.Div([
-                html.Img(id="logo", src=app.get_asset_url("python-covid.png"), height=50),
-                html.H5("Evolução COVID-19"),
+                html.H1("Uma analise de dados sobre"),
+                html.H5("A evolução COVID-19"),
                 dbc.Button("Brasil", color="primary", id="location-button", size="lg")
             ], style={}),
             html.P("Informe a data na qual deseja obter informações: ", style={"margin-top": "40px"}),
@@ -146,37 +146,45 @@ app.layout = dbc.Container(
 
 #======================================Interatividadade
 
-@app.callback(
+@app.callback (
         [
             Output("casos-recuperados-text", "children"),
             Output("em-acompanhamento-text", "children"),
             Output("casos-confirmados-text", "children"),
             Output("novos-casos-text", "children"),
             Output("obitos-text", "children"),
-            Output("obitos-na-data-text", "children"),
+            Output("obitos-na-data-text", "children")
         ],
-
-        [Input("date-picker", "date"), Input("location-button", "children")]
+        [Input("date-picker", "date"), Input("location-button", "children")
+            
+            
+            ]
 )
+
+
 def display_status(date, location):
-    if location == "BRASIL": 
-        df_date_on_date = df_brasil[df_brasil["date"] == date]
+    if location== "BRASIL":
+        df_data_on_date = df_brasil[df_brasil["data"] == date]
     else:
-        df_date_on_date = df_states[(df_states["estado"] == location) & (df_states["date"] == date)]
+        df_data_on_date = df_states[(df_states["estado"] == location) & (df_states["data"] == date)] 
+
+
         
-    df_date_on_date["Recuperadosnovos"]
-    recuperados_novos = "-" if df_date_on_date["Recuperadosnovos"].isna().value[0] else f'{int(df_date_on_date["Recuperadosnovos"].values[0]):,}'.replace(",", ".")
-    acompanhamentos_novos = "-" if df_date_on_date["emAcompanhamentoNovos"].isna().value[0] else f'{int(df_date_on_date["emAcompanhamentoNovos"].values[0]):,}'.replace(",", ".")
-    casos_acumulados = "-" if df_date_on_date["casosAcumulado"].isna().value[0] else f'{int(df_date_on_date["casosAcumulado"].values[0]):,}'.replace(",", ".")
-    casos_novos = "-" if df_date_on_date["casosNovos"].isna().value[0] else f'{int(df_date_on_date["casosNovos"].values[0]):,}'.replace(",", ".")
-    obitos_acumulado = "-" if df_date_on_date["obitosAcumulado"].isna().value[0] else f'{int(df_date_on_date["obitosAcumulado"].values[0]):,}'.replace(",", ".")
-    obitos_novos = "-" if df_date_on_date["obitosNovos"].isna().value[0] else f'{int(df_date_on_date["obitosNovos"].values[0]):,}'.replace(",", ".")
-    
-    return (recuperados_novos,
-        acompanhamentos_novos,
-        casos_acumulados,
-        casos_novos,
-        obitos_acumulado,
-        obitos_novos,)
+        recuperados_novos = "-" if df_data_on_date["Recuperadosnovos"].isna().values[0] else f'{int(df_data_on_date["Recuperadosnovos"].values[0]):, }'.replace(",", ".")
+        acompanhamentos_novos = "-" if df_data_on_date["emAcompanhamentoNovos"].isna().values[0] else f'{int(df_data_on_date["emAcompanhamentoNovos"].values[0]):, }'.replace(",", ".")
+        casos_acumulados = "-" if df_data_on_date["casosAcumulado"].isna().values[0] else f'{int(df_data_on_date["casosAcumulado"].values[0]):, }'.replace(",", ".")
+        casos_novos = "-" if df_data_on_date["casosNovos"].isna().values[0] else f'{int(df_data_on_date["casosNovos"].values[0]):, }'.replace(",", ".")
+        obitos_acumulados = "-" if df_data_on_date["obitosAcumulado"].isna().values[0] else f'{int(df_data_on_date["obitosAcumulado"].values[0]):, }'.replace(",", ".")
+        obitos_novos = "-" if df_data_on_date["obitosNovos"].isna().values[0] else f'{int(df_data_on_date["obitosNovos"].values[0]):, }'.replace(",", ".")
+        return(recuperados_novos, 
+            acompanhamentos_novos, 
+            casos_acumulados,
+            casos_novos,
+            obitos_acumulados,
+            obitos_novos,)
+
+
+
+
 if __name__ == "__main__":
     app.run_server(debug=True)
