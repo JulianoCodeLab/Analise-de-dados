@@ -12,7 +12,7 @@ import json  # Para leitura de dados ".json"
 import pandas as pd
 
 
-#=================================== Para ler o CSV
+#=================================== Para ler o CSVcd
 df_states = pd.read_csv("df_states.csv")
 df_brasil = pd.read_csv("df_brasil.csv")
 
